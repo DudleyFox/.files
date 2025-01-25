@@ -1,0 +1,10 @@
+[tools]
+node = "lts"
+
+[settings]
+experimental = true
+
+[settings.status]
+show_tools = true
+show_env = true
+missing_tools = "always"
