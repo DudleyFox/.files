@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
-
-# totall ripped off from https://github.com/ThePrimeagen/tmux-sessionizer
-
 switch_to() {
     if [[ -z $TMUX ]]; then
         tmux attach-session -t $1
@@ -27,7 +24,7 @@ if [[ $# -eq 1 ]]; then
 else
     # If someone wants to make this extensible, i'll accept
     # PR
-    selected=$(find ~/ ~/github/DudleyFox -mindepth 1 -maxdepth 1 -type d | fzf)
+    selected=$(find ~/ ~/gogs/code ~/github/DudleyFox -mindepth 1 -maxdepth 1 -type d | fzf)
 fi
 
 if [[ -z $selected ]]; then
