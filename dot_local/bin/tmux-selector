@@ -1,0 +1,8 @@
+
+selected=$(tmux ls | cut -f1 -d: | fzf)
+
+if [[ -z $selected ]]; then
+    exit 0
+fi
+
+tmux switch-client -t $selected
