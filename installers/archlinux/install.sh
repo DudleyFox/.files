@@ -21,4 +21,8 @@ sudo pacman -Sy --noconfirm unzip
 sudo pacman -Sy --noconfirm wget
 sudo pacman -Sy --noconfirm zsh
 
+sudo systemctl start sshd
+sudo systemctl enable sshd
+sudo ufw allow 22/tcp
+
 echo "Set up the private keys"
