@@ -21,3 +21,4 @@ PROMPT='
 '
 
 # End of lines added by compinstall
+eval "$(/home/fox/.local/bin/mise activate zsh)"
