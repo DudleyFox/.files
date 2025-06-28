@@ -13,23 +13,7 @@ autoload -Uz compinit
 compinit
 
 function parse_git_branch() {
-    in_wd="$(git rev-parse --is-inside-work-tree 2>/dev/null)" || return
-    test "$in_wd" = true || return
-    state=''
-    git update-index --refresh -q >/dev/null # avoid false positives with diff-index
-    if git rev-parse --verify HEAD >/dev/null 2>&1; then
-        git diff-index HEAD --quiet 2>/dev/null || state='*'
-    else
-        state='#'
-    fi
-    (
-        d="$(git rev-parse --show-cdup)" &&
-        cd "$d" &&
-        test -z "$(git ls-files --others --exclude-standard .)"
-    ) >/dev/null 2>&1 || state="${state}+"
-    branch="$(git symbolic-ref HEAD 2>/dev/null)"
-    test -z "$branch" && branch='<detached-HEAD>'
-    echo "${branch#refs/heads/}${state}"
+    git branch 2> /dev/null | sed -n -e 's/^\* \(.*\)/[\1]/p'
 }
 
 PROMPT='
