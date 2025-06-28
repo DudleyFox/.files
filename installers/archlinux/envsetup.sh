@@ -7,6 +7,8 @@ mkdir -p github/DudleyFox
 cd github/DudleyFox
 git clone git@github.com:DudleyFox/.files.git
 
+cp ~/github/DudleyFox/.files/.zshrc ~/.zshrc
+
 mkdir -p ~/.config/nvim
 cp -R -i .files/dot_config/* ~/.config/.
 
