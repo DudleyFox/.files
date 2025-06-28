@@ -17,6 +17,7 @@ sudo pacman -Sy --noconfirm make
 sudo pacman -Sy --noconfirm neovim
 sudo pacman -Sy --noconfirm openssh
 sudo pacman -Sy --noconfirm ripgrep
+sudo pacman -Sy --noconfirm tmux
 sudo pacman -Sy --noconfirm unzip
 sudo pacman -Sy --noconfirm wget
 sudo pacman -Sy --noconfirm zsh
