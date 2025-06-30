@@ -16,6 +16,8 @@ function parse_git_branch() {
     git branch 2> /dev/null | sed -n -e 's/^\* \(.*\)/[\1]/p'
 }
 
+alias gtx=tmux-sessionizer
+
 PROMPT='
 #--[%B%F{202}%~%f%b]-[%B%F{62}$(parse_git_branch)%f%b]-[%T]-->
 '
