@@ -25,6 +25,9 @@ git clone https://github.com/tmux-plugins/tpm .
 
 curl https://mise.run | sh
 
+echo "Changing shell to zsh..."
+chsh -s /usr/bin/zsh
+
 
 
 

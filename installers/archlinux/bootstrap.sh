@@ -8,8 +8,12 @@ fi
 
 useradd -m fox
 pacman -Sy --noconfirm sudo
+pacman -Sy --noconfirm openssh
 
 echo "" >> /etc/sudoers
 echo "fox   ALL=(ALL:ALL) ALL" >> /etc/sudoers
+
+echo "Set the password for fox:"
+passwd fox
 
 echo "Run the install.sh script next as the user fox"
