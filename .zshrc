@@ -22,8 +22,7 @@ PROMPT='
 #--[%B%F{202}%~%f%b]-[%B%F{62}$(parse_git_branch)%f%b]-[%T]-->
 '
 
-eval $(keychain --eval --quiet id_ed25519 ~/.ssh/githubkey)
-eval $(keychain --eval --quiet id_ed25519 ~/.ssh/id_ed25519)
+eval $(keychain --eval --quiet id_ed25519 id_ed25519_growl)
 
 # End of lines added by compinstall
 eval "$(/home/fox/.local/bin/mise activate zsh)"
