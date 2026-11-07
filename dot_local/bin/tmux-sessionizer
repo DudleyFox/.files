@@ -26,7 +26,12 @@ hydrate() {
 if [[ $# -eq 1 ]]; then
     selected="$1"
 else
-    selected=$(find ~/ ~/gogs/code ~/github/ghostty-org ~/github/DudleyFox -mindepth 1 -maxdepth 1 -type d | fzf)
+    if command -v fzcd >/dev/null 2>&1; then
+        # fzcd: interactive tree navigator (https://github.com/DudleyFox/fzcd)
+        selected=$(fzcd ~)
+    else
+        selected=$(find ~/ ~/gogs/code ~/github/ghostty-org ~/github/DudleyFox -mindepth 1 -maxdepth 1 -type d | fzf)
+    fi
 fi
 
 if [[ -z "$selected" ]]; then
