@@ -19,7 +19,7 @@ function parse_git_branch() {
 alias gtx=tmux-sessionizer
 
 PROMPT='
-#--[%B%F{202}%~%f%b]-[%B%F{62}$(parse_git_branch)%f%b]-[%T]-->
+#-%F{green}%m%f-[%B%F{202}%~%f%b]-[%B%F{62}$(parse_git_branch)%f%b]-[%T]-->
 '
 
 eval $(keychain --eval --quiet id_ed25519 id_ed25519_growl)
