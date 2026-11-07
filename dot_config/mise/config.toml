@@ -1,6 +1,11 @@
 [tools]
 node = "lts"
 
+[env]
+# Keep Go's workspace (installed binaries, module cache) out of $HOME
+GOPATH = "{{env.HOME}}/.local/share/go"
+_.path = ["{{env.HOME}}/.local/share/go/bin"]
+
 [settings]
 experimental = true
 
