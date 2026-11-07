@@ -1,38 +1,79 @@
 #!/usr/bin/sh
 set -e
 
-cd ~
+SCRIPT_DIR=$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)
+REPO_ROOT=$(CDPATH='' cd -- "$SCRIPT_DIR/../.." && pwd)
 
-mkdir -p github/DudleyFox
-cd github/DudleyFox
-git clone git@github.com:DudleyFox/.files.git
+if [ "$(id -u)" -eq 0 ]; then
+        echo 'Run this script as your normal user, not root' >&2
+        exit 1
+fi
 
-cp ~/github/DudleyFox/.files/.zshrc ~/.zshrc
+# Keep the terminal on fd 3 so cp -i can prompt from inside piped loops
+exec 3<&0
 
-mkdir -p ~/.config/nvim
-cp -R -i .files/dot_config/* ~/.config/.
+# copy_file SRC DST: skip if identical, copy if missing, ask if different
+copy_file() {
+        if [ -e "$2" ] && cmp -s "$1" "$2"; then
+                return 0
+        fi
+        mkdir -p "$(dirname -- "$2")"
+        if [ -e "$2" ]; then
+                cp -i "$1" "$2" <&3
+        else
+                echo "Installing $2"
+                cp "$1" "$2"
+        fi
+}
 
-mkdir -p ~/.local
-cp -R -i .files/dot_local/* ~/.local/.
+# copy_tree SRCDIR DSTDIR: copy_file every file under SRCDIR
+copy_tree() {
+        find "$1" -type f | while IFS= read -r src; do
+                copy_file "$src" "$2/${src#"$1"/}"
+        done
+}
 
-cd ~/.config/nvim
-git clone git@github.com:DudleyFox/kickstart.nvim.git .
-git switch active
+copy_file "$REPO_ROOT/.zshrc" "$HOME/.zshrc"
+copy_tree "$REPO_ROOT/dot_config" "$HOME/.config"
+copy_tree "$REPO_ROOT/dot_local" "$HOME/.local"
 
-mkdir -p ~/.config/tmux/plugins/tpm
-cd ~/.config/tmux/plugins/tpm
-git clone https://github.com/tmux-plugins/tpm .
+# Neovim config
+NVIM_DIR=$HOME/.config/nvim
+if [ -d "$NVIM_DIR/.git" ]; then
+        echo "nvim config already cloned"
+else
+        git clone git@github.com:DudleyFox/kickstart.nvim.git "$NVIM_DIR"
+fi
+if [ "$(git -C "$NVIM_DIR" branch --show-current)" != "active" ]; then
+        git -C "$NVIM_DIR" switch active
+fi
 
-curl https://mise.run | sh
+# tmux plugin manager
+TPM_DIR=$HOME/.config/tmux/plugins/tpm
+if [ -d "$TPM_DIR/.git" ]; then
+        echo "tpm already cloned"
+else
+        git clone https://github.com/tmux-plugins/tpm "$TPM_DIR"
+fi
 
-echo "Changing shell to zsh..."
-chsh -s /usr/bin/zsh
+# mise
+if command -v mise >/dev/null 2>&1 || [ -x "$HOME/.local/bin/mise" ]; then
+        echo "mise already installed"
+else
+        curl https://mise.run | sh
+fi
 
+# Login shell
+if [ "$(getent passwd "$(id -un)" | cut -d: -f7)" = "/usr/bin/zsh" ]; then
+        echo "Shell is already zsh"
+else
+        echo "Changing shell to zsh..."
+        chsh -s /usr/bin/zsh
+fi
 
-git config --global pull.rebase true
-
-
-
-
-
-
+# git
+if [ "$(git config --global --get pull.rebase || true)" = "true" ]; then
+        echo "git pull.rebase already set"
+else
+        git config --global pull.rebase true
+fi

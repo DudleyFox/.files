@@ -1,28 +1,18 @@
-
 #!/usr/bin/sh
 set -e
 
-sudo pacman -Sy --noconfirm autoconf
-sudo pacman -Sy --noconfirm automake
-sudo pacman -Sy --noconfirm base
-sudo pacman -Sy --noconfirm clang
-sudo pacman -Sy --noconfirm fd
-sudo pacman -Sy --noconfirm fzf
-sudo pacman -Sy --noconfirm git
-sudo pacman -Sy --noconfirm keychain
-sudo pacman -Sy --noconfirm less
-sudo pacman -Sy --noconfirm lua51
-sudo pacman -Sy --noconfirm luarocks
-sudo pacman -Sy --noconfirm make
-sudo pacman -Sy --noconfirm neovim
-sudo pacman -Sy --noconfirm ripgrep
-sudo pacman -Sy --noconfirm tmux
-sudo pacman -Sy --noconfirm unzip
-sudo pacman -Sy --noconfirm wget
-sudo pacman -Sy --noconfirm zsh
+PKGS="autoconf automake base clang fd fzf git keychain less lua51 luarocks
+make neovim ripgrep tmux unzip wget zsh"
 
-sudo systemctl start sshd
-sudo systemctl enable sshd
-sudo ufw allow 22/tcp
+# pacman -T prints only the packages that are not installed
+# shellcheck disable=SC2086
+missing=$(pacman -T $PKGS || true)
+if [ -n "$missing" ]; then
+        echo "Installing:" $missing
+        # shellcheck disable=SC2086
+        sudo pacman -Syu --needed --noconfirm $missing
+else
+        echo "All packages already installed"
+fi
 
 echo "Set up the private keys"
