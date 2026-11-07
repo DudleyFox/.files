@@ -2,7 +2,7 @@
 set -e
 
 PKGS="autoconf automake base clang fd fzf git keychain less lua51 luarocks
-make neovim ripgrep tmux unzip wget zsh"
+make neovim ripgrep tmux tree-sitter-cli unzip wget zsh"
 
 # pacman -T prints only the packages that are not installed
 # shellcheck disable=SC2086
